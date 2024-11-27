@@ -1,15 +1,8 @@
-//@ts-check
-
-// NAME: Keyboard Shortcuts with Notifications
-// AUTHOR: Your Name
-// DESCRIPTION: Adds shortcuts for "MAIN" playlist with undo/redo, Spotify notifications, and debug logs.
-
-/// <reference path="../../spicetify-cli/globals.d.ts" />
-
 (async function keyboardShortcuts() {
-    if (!(Spicetify?.Mousetrap && Spicetify?.Player && Spicetify?.Platform && Spicetify?.CosmosAsync)) {
+    // Retry initialization until all Spicetify dependencies are available
+    if (!Spicetify || !Spicetify.Mousetrap || !Spicetify.Player || !Spicetify.Platform) {
         console.warn("Spicetify dependencies not loaded yet. Retrying...");
-        setTimeout(keyboardShortcuts, 300); // Retry after 300ms
+        setTimeout(keyboardShortcuts, 300);
         return;
     }
 
@@ -56,46 +49,28 @@
         const mainPlaylistId = await locateMainPlaylist();
         if (!mainPlaylistId) return;
 
-        const currentTrack = Spicetify.Player?.data?.item || Spicetify.Player.getTrack();
+        const currentTrack = Spicetify.Player?.data?.item;
         if (!currentTrack) {
             showNotification("No track currently playing.", true);
             return;
         }
 
+        console.log("Currently playing track:", currentTrack.name);
+
         const endpoint = `https://api.spotify.com/v1/playlists/${mainPlaylistId}/tracks`;
 
-        const action = {
-            do: async () => {
-                try {
-                    const response = await Spicetify.CosmosAsync.post(endpoint, {
-                        uris: [currentTrack.uri],
-                    });
-                    if (response?.snapshot_id) {
-                        showNotification("Track added to MAIN playlist.");
-                        console.log(`Track "${currentTrack.name}" added to MAIN playlist.`);
-                    }
-                } catch (error) {
-                    console.error("Error adding track to MAIN playlist:", error);
-                    showNotification("Error adding track to MAIN playlist.", true);
-                }
-            },
-            undo: async () => {
-                try {
-                    const response = await Spicetify.CosmosAsync.delete(endpoint, {
-                        tracks: [{ uri: currentTrack.uri }],
-                    });
-                    if (response?.snapshot_id) {
-                        showNotification("Track removed from MAIN playlist.");
-                        console.log(`Track "${currentTrack.name}" removed from MAIN playlist.`);
-                    }
-                } catch (error) {
-                    console.error("Error removing track from MAIN playlist:", error);
-                    showNotification("Error removing track from MAIN playlist.", true);
-                }
-            },
-        };
-
-        performAction(action);
+        try {
+            const response = await Spicetify.CosmosAsync.post(endpoint, {
+                uris: [currentTrack.uri],
+            });
+            if (response?.snapshot_id) {
+                showNotification("Track added to MAIN playlist.");
+                console.log(`Track "${currentTrack.name}" added to MAIN playlist.`);
+            }
+        } catch (error) {
+            console.error("Error adding track to MAIN playlist:", error);
+            showNotification("Error adding track to MAIN playlist.", true);
+        }
     }
 
     /**
@@ -103,7 +78,7 @@
      */
     async function removeCurrentTrackFromCurrentPlaylist() {
         const currentPlaylistUri = Spicetify.Player?.data?.context?.uri;
-        const currentTrack = Spicetify.Player?.data?.item || Spicetify.Player.getTrack();
+        const currentTrack = Spicetify.Player?.data?.item;
         if (!currentPlaylistUri || !currentTrack) {
             showNotification("No track or playlist context found.", true);
             return;
@@ -112,54 +87,21 @@
         const playlistId = currentPlaylistUri.split(":").pop();
         const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 
-        const action = {
-            do: async () => {
-                try {
-                    const response = await Spicetify.CosmosAsync.delete(endpoint, {
-                        tracks: [{ uri: currentTrack.uri }],
-                    });
-                    if (response?.snapshot_id) {
-                        showNotification("Track removed from current playlist.");
-                        console.log(`Track "${currentTrack.name}" removed from playlist "${playlistId}".`);
-                    }
-                } catch (error) {
-                    console.error("Error removing track from current playlist:", error);
-                    showNotification("Error removing track from current playlist.", true);
-                }
-            },
-            undo: async () => {
-                try {
-                    const response = await Spicetify.CosmosAsync.post(endpoint, {
-                        uris: [currentTrack.uri],
-                    });
-                    if (response?.snapshot_id) {
-                        showNotification("Track re-added to current playlist.");
-                        console.log(`Track "${currentTrack.name}" re-added to playlist "${playlistId}".`);
-                    }
-                } catch (error) {
-                    console.error("Error re-adding track to current playlist:", error);
-                    showNotification("Error re-adding track to current playlist.", true);
-                }
-            },
-        };
+        try {
+            await fetch(endpoint, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${Spicetify.Platform?.Session?.accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ tracks: [{ uri: currentTrack.uri }] }),
+            });
 
-        performAction(action);
-    }
-
-    /**
-     * Perform an action and store it in the action history for undo/redo.
-     * @param {object} action - The action to perform.
-     */
-    function performAction(action) {
-        redoStack.length = 0; // Clear the redo stack
-        actionHistory.push(action); // Add the action to history
-
-        if (typeof action.do === "function") {
-            try {
-                action.do();
-            } catch (error) {
-                console.error("Failed to perform action:", error);
-            }
+            showNotification("Track removed from current playlist.");
+            console.log(`Track "${currentTrack.name}" removed from playlist "${playlistId}".`);
+        } catch (error) {
+            console.error("Error removing track from current playlist:", error);
+            showNotification("Error removing track from current playlist.", true);
         }
     }
 
@@ -193,7 +135,7 @@
         showNotification("Action redone.");
     }
 
-    // Bind Shortcuts
+    // Bind shortcuts
     Spicetify.Mousetrap.bind("ctrl+1", async () => {
         console.log("Ctrl+1 pressed: Adding current track to MAIN playlist...");
         await addCurrentTrackToMainPlaylist();
