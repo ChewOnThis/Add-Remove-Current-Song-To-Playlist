@@ -1,0 +1,10 @@
+{
+  "name": "Add And Remove Current Song From Playlist Shortcut",
+  "description": "Spicetify extension that lets you add the current song playing to a desired playlist, as well as removing the current song from current playlist",
+  "preview": "AddNRemove.png",
+  "main": "AddAndRemove.js",
+  "readme": "README.md",
+  "authors": [
+      { "name": "ChewOnThis", "url": "https://github.com/ChewOnThis/" }
+  ]
+}
