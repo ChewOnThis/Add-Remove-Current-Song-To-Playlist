@@ -48,7 +48,7 @@
 
 Once installed, the extension will automatically load when Spotify starts. Use the keyboard shortcuts to manage your playlists efficiently. Notifications will confirm successful actions or errors.
 
-### **Customization**
+### **Customisation**
 
 You can customize the playlist name, shortcuts, or functionality by editing the script. Key areas to modify include:
 - **Playlist Name**: Change `"MAIN"` in the script to your preferred playlist name.
@@ -61,9 +61,3 @@ Contributions, suggestions, and bug reports are welcome! To contribute:
 2. Create a feature branch.
 3. Submit a pull request with your changes.
 
-### **License**
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
----
-
-Let me know if you'd like to add more sections, such as screenshots or FAQs!
