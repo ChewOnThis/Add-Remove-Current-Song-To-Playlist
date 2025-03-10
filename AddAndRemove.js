@@ -117,7 +117,7 @@ async function createMainPlaylist(userId) {
             body: JSON.stringify({
                 name: playlistName,
                 public: false,
-                description: "Auto-generated MAIN playlist by Caleb's Spicetify plugin :) https://github.com/ChewOnThis/Add-Remove-Current-Song-To-Playlist/edit/main/AddAndRemove.js",
+                description: "Auto-generated MAIN playlist by Caleb's Spicetify plugin :) https://github.com/ChewOnThis/Add-Remove-Current-Song-To-Playlist",
             }),
         };
 
