@@ -1,63 +1,99 @@
-# Add-Remove-Current-Song-To-Playlist
 
-### **Overview**
-`AddAndRemove.js` is a Spicetify extension that enables keyboard shortcuts to quickly manage Spotify playlists. With this script, you can:
-- Add the currently playing track to a specific playlist (e.g., the "MAIN" playlist which I've specified, but you can change it to any playlist in your favourite code editor).
-- Remove the currently playing track from the current playlist.
-- Undo and redo playlist actions.
+# Chewy's Spicetify Keyboard Shortcuts
 
-### **Features**
-- **Add to "MAIN" Playlist**: Quickly add the current track to a designated playlist (default is a playlist named "MAIN" with any following characters).
-- **Remove from Playlist**: Remove the current track from the playlist you're currently listening to.
-- **Undo/Redo Actions**: Revert or redo changes made to playlists with keyboard shortcuts.
-- **Custom Notifications**: Get feedback through Spotify notifications for every action.
+This Spicetify extension automates the management of a special Spotify playlist. It looks for a playlist formatted as `MAIN DD/MM/YY` (where `DD/MM/YY` is any date) that is owned by you. If it cannot find such a playlist, it automatically creates one using the current date.
 
-### **Keyboard Shortcuts**
-| Shortcut      | Action                                       |
-|---------------|---------------------------------------------|
-| `Ctrl+1`      | Add the currently playing track to the "MAIN" playlist. |
-| `` Ctrl+` ``  | Remove the currently playing track from the current playlist. |
-| `Ctrl+Z`      | Undo the last action.                       |
-| `Ctrl+Y`      | Redo the last undone action.                |
+## Features
 
-### **Installation**
+- **Dynamic Playlist Lookup:**  
+  Searches for a playlist with the exact format `MAIN DD/MM/YY` (e.g., `MAIN 24/03/25`) owned by you.
+  
+- **Automatic Playlist Creation:**  
+  If no matching playlist is found, the extension creates one using the current date.
+  
+- **Track Management:**  
+  Includes helper functions for adding and removing tracks from playlists.
+  
+- **Undo/Redo Support:**  
+  Supports undo/redo functionality for track management actions.
+  
+- **Keyboard Shortcuts:**  
+  Utilize Spicetify keyboard shortcuts for quick actions:
+  - `Ctrl+1`: Add the current track to the MAIN playlist.
+  - `Ctrl+\``: Remove the current track from the current playlist.
+  - `Ctrl+2`: Remove all selected tracks.
+  - `Ctrl+Z`: Undo the last action.
+  - `Ctrl+Y` or `Ctrl+Shift+Z`: Redo the last undone action.
 
-1. **Download and Place the Script**:
-   - Place `AddAndRemove.js` in your Spicetify Extensions directory:
-     ```
-     C:\Users\<YourUsername>\.spicetify\Extensions
-     ```
-     Replace `<YourUsername>` with your system username.
+## Installation
 
-2. **Configure Spicetify**:
-   - Add the script to Spicetify's configuration:
-     ```bash
-     spicetify config extensions AddAndRemove.js
-     ```
+### Prerequisites
 
-3. **Apply Configuration**:
-   - Apply the changes and reload Spicetify:
-     ```bash
-     spicetify apply
-     ```
+- **Spicetify:**  
+  Ensure you have [Spicetify](https://spicetify.app/) installed and configured on your system. Follow the [getting started guide](https://spicetify.app/get-started/) if needed.
 
-4. **Restart Spotify**:
-   - Close and reopen Spotify to activate the extension.
+### Steps
 
-### **Usage**
+1. **Clone the Repository:**
 
-Once installed, the extension will automatically load when Spotify starts. Use the keyboard shortcuts to manage your playlists efficiently. Notifications will confirm successful actions or errors.
+   ```bash
+   git clone https://github.com/ChewOnThis/Add-Remove-Current-Song-To-Playlist
+   cd Add-Remove-Current-Song-To-Playlist
+   ```
 
-### **Customisation**
+2. **Copy the Extension File:**
 
-You can customize the playlist name, shortcuts, or functionality by editing the script. Key areas to modify include:
-- **Playlist Name**: Change `"MAIN"` in the script to your preferred playlist name.
-- **Keyboard Shortcuts**: Update the key bindings in the `Mousetrap.bind()` calls.
+   Copy the `addAndRemove.js` file (or the file containing the extension code) to your Spicetify extensions folder. The default locations are:
 
-### **Contributing**
+   - **Windows:** `%userprofile%\.spicetify\Extensions`
+   - **macOS/Linux:** `~/.spicetify/Extensions`
 
-Contributions, suggestions, and bug reports are welcome! To contribute:
-1. Fork this repository.
-2. Create a feature branch.
-3. Submit a pull request with your changes.
+   For example, on macOS/Linux:
+
+   ```bash
+   cp addAndRemove.js ~/.spicetify/Extensions/
+   ```
+
+3. **Enable the Extension:**
+
+   ```bash
+   spicetify config extensions addAndRemove.js
+   ```
+
+4. **Apply the Changes:**
+
+   After updating the configuration, apply the changes with:
+
+   ```bash
+   spicetify apply
+   ```
+
+## Usage
+
+Once installed and applied, the extension will automatically run with Spotify via Spicetify. It will search for a playlist named in the format `MAIN DD/MM/YY`. If none is found, it creates a new playlist using today's date in that format.
+
+### Keyboard Shortcuts
+
+- **Add current track to MAIN playlist:** `Ctrl+1`
+- **Remove current track from current playlist:** `Ctrl+\``
+- **Remove all selected tracks:** `Ctrl+2`
+- **Undo last action:** `Ctrl+Z`
+- **Redo last undone action:** `Ctrl+Y` or `Ctrl+Shift+Z`
+
+## Customization
+
+Feel free to modify the code to suit your needs. For example, you can change the date format in the `formatDate` function or adjust the keyboard shortcuts.
+
+## Contributing
+
+Contributions, bug fixes, and feature requests are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/yourusername/spicetify-main-playlist-manager).
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- [Spicetify](https://spicetify.app/) for providing an awesome platform to customize Spotify.
+- The Spicetify community for continuous improvements and support.
 
