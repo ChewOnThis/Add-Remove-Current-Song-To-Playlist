@@ -43,7 +43,7 @@ This Spicetify extension automates the management of a special Spotify playlist.
 
 2. **Copy the Extension File:**
 
-   Copy the `addAndRemove.js` file (or the file containing the extension code) to your Spicetify extensions folder. The default locations are:
+   Copy the `AddAndRemove.js` file (or the file containing the extension code) to your Spicetify extensions folder. The default locations are:
 
    - **Windows:** `%userprofile%\.spicetify\Extensions`
    - **macOS/Linux:** `~/.spicetify/Extensions`
@@ -51,13 +51,13 @@ This Spicetify extension automates the management of a special Spotify playlist.
    For example, on macOS/Linux:
 
    ```bash
-   cp addAndRemove.js ~/.spicetify/Extensions/
+   cp AddAndRemove.js ~/.spicetify/Extensions/
    ```
 
 3. **Enable the Extension:**
 
    ```bash
-   spicetify config extensions addAndRemove.js
+   spicetify config extensions AddAndRemove.js
    ```
 
 4. **Apply the Changes:**
@@ -80,7 +80,7 @@ Once installed and applied, the extension will automatically run with Spotify vi
 - **Undo last action:** `Ctrl+Z`
 - **Redo last undone action:** `Ctrl+Y` or `Ctrl+Shift+Z`
 
-## Customization
+## Customisation
 
 Feel free to modify the code to suit your needs. For example, you can change the date format in the `formatDate` function or adjust the keyboard shortcuts.
 
@@ -94,6 +94,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
-- [Spicetify](https://spicetify.app/) for providing an awesome platform to customize Spotify.
+- [Spicetify](https://spicetify.app/) for providing an awesome platform to customise Spotify.
 - The Spicetify community for continuous improvements and support.
 
