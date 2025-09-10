@@ -40,16 +40,21 @@
     /**
      * A helper to call fetch() and retry once on HTTP 401 (token expired).
      */
-    async function fetchWithRetry(url, options) {
+    async function fetchWithRetry(url, options = {}) {
         await ensureValidAccessToken(); // Make sure we have a token first
-        let response = await fetch(url, options);
+
+        // Always clone options and headers to avoid mutation issues
+        let opts = { ...options };
+        opts.headers = { ...(options.headers || {}), Authorization: `Bearer ${accessToken}` };
+
+        let response = await fetch(url, opts);
 
         // If unauthorized, token might be stale. Refresh once and retry.
         if (response.status === 401) {
             console.warn("Got 401; attempting token refresh & retry.");
             await refreshAccessToken();
-            options.headers.Authorization = `Bearer ${accessToken}`;
-            response = await fetch(url, options);
+            opts.headers.Authorization = `Bearer ${accessToken}`;
+            response = await fetch(url, opts);
         }
         return response;
     }
